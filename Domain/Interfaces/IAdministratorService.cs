@@ -5,6 +5,6 @@ namespace MinimalApi.Domain.Interfaces
 {
     public interface IAdministratorService
     {
-        Administrator Login(LoginDTO loginDTO);
+        Administrator? Login(LoginDTO loginDTO);
     }
 }

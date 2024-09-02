@@ -15,7 +15,7 @@ namespace MinimalApi.Domain.Services
             _context = context;
         }
 
-        public Administrator Login(LoginDTO loginDTO)
+        public Administrator? Login(LoginDTO loginDTO)
         {
             var admin = _context.Administrators.Where(a => a.Email == loginDTO.Email && a.Password == loginDTO.Password).FirstOrDefault();
             return admin;
