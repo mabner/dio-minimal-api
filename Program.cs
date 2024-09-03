@@ -2,16 +2,17 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using MinimalApi.Domain.DTOs;
+using MinimalApi.Domain.Entities;
 using MinimalApi.Domain.Interfaces;
 using MinimalApi.Domain.ModelViews;
 using MinimalApi.Domain.Services;
-using MinimalApi.DTOs;
 using MinimalApi.Infrastructure.Db;
 
 #region Builder
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<IAdministratorService, AdministratorService>();
+builder.Services.AddScoped<IVehicleService, VehicleService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -49,7 +50,21 @@ app.MapPost(
 #endregion
 
 #region Vehicle
+app.MapPost(
+    "/vehicles",
+    ([FromBody] VehicleDTO vehicleDTO, IVehicleService vehicleService) =>
+    {
+        var vehicle = new Vehicle
+        {
+            Model = vehicleDTO.Model,
+            Make = vehicleDTO.Make,
+            Year = vehicleDTO.Year,
+        };
+        vehicleService.Add(vehicle);
 
+        return Results.Created($"/vehicle/{vehicle.Id}", vehicle);
+    }
+);
 #endregion
 
 #region App

@@ -12,7 +12,7 @@ namespace MinimalApi.Domain.Entities
 
         [Required]
         [StringLength(150)]
-        public string Name { get; set; } = default!;
+        public string Model { get; set; } = default!;
 
         [Required]
         [StringLength(100)]
