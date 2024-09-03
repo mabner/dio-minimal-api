@@ -75,6 +75,17 @@ app.MapGet(
         return Results.Ok(vehicles);
     }
 ).WithTags("Vehicle");
+
+app.MapGet(
+    "/vehicle/{id}",
+    ([FromRoute] int id, IVehicleService vehicleService) =>
+    {
+        var vehicle = vehicleService.GetVehicleById(id);
+
+        if (vehicle == null) return Results.NotFound();
+        return Results.Ok(vehicle);
+    }
+).WithTags("Vehicle");
 #endregion
 
 #region App
