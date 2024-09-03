@@ -7,6 +7,7 @@ using MinimalApi.Domain.Services;
 using MinimalApi.DTOs;
 using MinimalApi.Infrastructure.Db;
 
+#region Builder
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<IAdministratorService, AdministratorService>();
@@ -17,7 +18,7 @@ builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "DIO - Minimal API", Version = "v1" });
 });
 
-// Passing teh config with the builder
+// Passing the config with the builder
 builder.Services.AddDbContext<DataBaseContext>(options =>
 {
     options.UseMySql(
@@ -27,11 +28,15 @@ builder.Services.AddDbContext<DataBaseContext>(options =>
 });
 
 var app = builder.Build();
+#endregion
 
+#region Home
 app.MapGet("/", () => Results.Json(new Home()));
+#endregion
 
+#region Administrators
 app.MapPost(
-    "/login",
+    "/administrators/login",
     ([FromBody] LoginDTO loginDTO, IAdministratorService administratorService) =>
     {
         if (administratorService.Login(loginDTO) != null)
@@ -40,7 +45,13 @@ app.MapPost(
             return Results.Unauthorized();
     }
 );
+#endregion
 
+#region Vehicle
+
+#endregion
+
+#region App
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
@@ -48,3 +59,4 @@ app.UseSwaggerUI(c =>
 });
 
 app.Run();
+#endregion
