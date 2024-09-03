@@ -33,7 +33,7 @@ var app = builder.Build();
 #endregion
 
 #region Home
-app.MapGet("/", () => Results.Json(new Home()));
+app.MapGet("/", () => Results.Json(new Home())).WithTags("Home");
 #endregion
 
 #region Administrators
@@ -46,7 +46,7 @@ app.MapPost(
         else
             return Results.Unauthorized();
     }
-);
+).WithTags("Administrators");
 #endregion
 
 #region Vehicle
@@ -64,7 +64,7 @@ app.MapPost(
 
         return Results.Created($"/vehicle/{vehicle.Id}", vehicle);
     }
-);
+).WithTags("Vehicle");
 
 app.MapGet(
     "/vehicles",
@@ -74,7 +74,7 @@ app.MapGet(
 
         return Results.Ok(vehicles);
     }
-);
+).WithTags("Vehicle");
 #endregion
 
 #region App
