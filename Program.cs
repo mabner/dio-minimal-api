@@ -50,10 +50,33 @@ app.MapPost(
 #endregion
 
 #region Vehicle
+ValidationErrors validateDTO(VehicleDTO vehicleDTO)
+{
+    var validation = new ValidationErrors
+    {
+        Messages = new List<string> { }
+    };
+
+    if (string.IsNullOrEmpty(vehicleDTO.Model))
+        validation.Messages.Add("The vehicle model must be informed.");
+
+    if (string.IsNullOrEmpty(vehicleDTO.Make))
+        validation.Messages.Add("The vehicle make must be informed.");
+
+    if (vehicleDTO.Year == 0)
+        validation.Messages.Add("The vehicle year of manufacture must be informed.");
+
+    return validation;
+}
+
 app.MapPost(
     "/vehicles",
     ([FromBody] VehicleDTO vehicleDTO, IVehicleService vehicleService) =>
     {
+        var validation = validateDTO(vehicleDTO);
+        if (validation.Messages.Count > 0)
+            return Results.BadRequest(validation);
+
         var vehicle = new Vehicle
         {
             Model = vehicleDTO.Model,
@@ -92,8 +115,11 @@ app.MapPut(
     ([FromRoute] int id, VehicleDTO vehicleDTO, IVehicleService vehicleService) =>
     {
         var vehicle = vehicleService.GetVehicleById(id);
-
         if (vehicle == null) return Results.NotFound();
+
+        var validation = validateDTO(vehicleDTO);
+        if (validation.Messages.Count > 0)
+            return Results.BadRequest(validation);
 
         vehicle.Model = vehicleDTO.Model;
         vehicle.Make = vehicleDTO.Make;
