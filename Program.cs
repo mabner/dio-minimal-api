@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using MinimalApi.Domain.DTOs;
 using MinimalApi.Domain.Entities;
+using MinimalApi.Domain.Enums;
 using MinimalApi.Domain.Interfaces;
 using MinimalApi.Domain.ModelViews;
 using MinimalApi.Domain.Services;
@@ -45,6 +46,44 @@ app.MapPost(
             return Results.Ok("Login com sucesso");
         else
             return Results.Unauthorized();
+    }
+).WithTags("Administrators");
+
+app.MapPost(
+    "/administrators",
+    ([FromBody] AdministratorDTO administratorDTO, IAdministratorService administratorService) =>
+    {
+        var validation = new ValidationErrors
+        {
+            Messages = new List<string>()
+        };
+        if (string.IsNullOrEmpty(administratorDTO.Email))
+            validation.Messages.Add("E-mail must be informed.");
+        if (string.IsNullOrEmpty(administratorDTO.Password))
+            validation.Messages.Add("Password must be informed.");
+        if (administratorDTO.Profile == null)
+            validation.Messages.Add("Profile must be informed.");
+
+        if (validation.Messages.Count > 0)
+            return Results.BadRequest(validation);
+
+        var administrator = new Administrator
+        {
+            Email = administratorDTO.Email,
+            Password = administratorDTO.Password,
+            Profie = administratorDTO.Profile?.ToString() ?? Profile.user.ToString(),
+        };
+
+
+        return Results.Created($"/administrator/{administrator.Id}", administrator);
+    }
+).WithTags("Administrators");
+
+app.MapGet(
+    "/administrators",
+    ([FromQuery] int? page, IAdministratorService administratorService) =>
+    {
+        return Results.Ok(administratorService.GetAdministrators(page));
     }
 ).WithTags("Administrators");
 #endregion
