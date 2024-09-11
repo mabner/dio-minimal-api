@@ -58,13 +58,11 @@ ValidationErrors validateDTO(VehicleDTO vehicleDTO)
     };
 
     if (string.IsNullOrEmpty(vehicleDTO.Model))
-        validation.Messages.Add("The vehicle model must be informed.");
-
+        validation.Messages.Add("Model must be informed.");
     if (string.IsNullOrEmpty(vehicleDTO.Make))
-        validation.Messages.Add("The vehicle make must be informed.");
-
+        validation.Messages.Add("Make must be informed.");
     if (vehicleDTO.Year == 0)
-        validation.Messages.Add("The vehicle year of manufacture must be informed.");
+        validation.Messages.Add("Year of manufacture must be informed.");
 
     return validation;
 }
