@@ -7,6 +7,6 @@ namespace MinimalApi.Domain.Interfaces
     {
         Administrator? Login(LoginDTO loginDTO);
         Administrator Add(Administrator administrator);
-        List<AdministratorDTO> GetAdministrators(int? page);
+        List<Administrator> GetAdministrators(int? page);
     }
 }
