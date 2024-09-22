@@ -2,8 +2,8 @@
 {
     public enum Profile
     {
-        admin,
-        superuser,
-        user
+        Admin,
+        Superuser,
+        User
     }
 }
