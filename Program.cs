@@ -86,6 +86,20 @@ app.MapGet(
         return Results.Ok(administratorService.GetAdministrators(page));
     }
 ).WithTags("Administrators");
+
+
+app.MapGet(
+    "/administrators/{id}",
+    ([FromRoute] int id, IAdministratorService administratorService) =>
+    {
+        var administrator = administratorService.GetAdministratorById(id);
+
+        if (administrator == null) return Results.NotFound();
+        return Results.Ok(administrator);
+    }
+).WithTags("Administrators");
+
+
 #endregion
 
 #region Vehicle

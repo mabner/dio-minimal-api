@@ -1,8 +1,7 @@
+using MinimalApi.Domain.DTOs;
 using MinimalApi.Domain.Entities;
 using MinimalApi.Domain.Interfaces;
-using MinimalApi.Domain.DTOs;
 using MinimalApi.Infrastructure.Db;
-using Microsoft.EntityFrameworkCore;
 
 namespace MinimalApi.Domain.Services
 {
@@ -42,6 +41,11 @@ namespace MinimalApi.Domain.Services
             }
 
             return query.ToList();
+        }
+
+        Administrator? IAdministratorService.GetAdministratorById(int id)
+        {
+            return _context.Administrators.Find(id);
         }
     }
 }
