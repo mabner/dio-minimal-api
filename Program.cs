@@ -71,11 +71,16 @@ app.MapPost(
         {
             Email = administratorDTO.Email,
             Password = administratorDTO.Password,
-            Profie = administratorDTO.Profile?.ToString() ?? Profile.user.ToString(),
+            Profie = administratorDTO.Profile.ToString() ?? Profile.User.ToString(),
         };
 
 
-        return Results.Created($"/administrator/{administrator.Id}", administrator);
+        return Results.Created($"/administrators/{administrator.Id}", new AdministratorModelView
+        {
+            Id = administrator.Id,
+            Email = administrator.Email,
+            Profile = administrator.Profie
+        });
     }
 ).WithTags("Administrators");
 
@@ -83,7 +88,18 @@ app.MapGet(
     "/administrators",
     ([FromQuery] int? page, IAdministratorService administratorService) =>
     {
-        return Results.Ok(administratorService.GetAdministrators(page));
+        var admins = new List<AdministratorModelView>();
+        var administrators = administratorService.GetAdministrators(page);
+        foreach (var admin in administrators)
+        {
+            admins.Add(new AdministratorModelView
+            {
+                Id = admin.Id,
+                Email = admin.Email,
+                Profile = admin.Profie
+            });
+        }
+        return Results.Ok(admins);
     }
 ).WithTags("Administrators");
 
@@ -95,7 +111,12 @@ app.MapGet(
         var administrator = administratorService.GetAdministratorById(id);
 
         if (administrator == null) return Results.NotFound();
-        return Results.Ok(administrator);
+        return Results.Ok(new AdministratorModelView
+        {
+            Id = administrator.Id,
+            Email = administrator.Email,
+            Profile = administrator.Profie
+        });
     }
 ).WithTags("Administrators");
 
