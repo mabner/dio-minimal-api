@@ -181,7 +181,7 @@ app.MapPost(
 
         return Results.Created($"/vehicle/{vehicle.Id}", vehicle);
     }
-).WithTags("Vehicle");
+).RequireAuthorization().WithTags("Vehicle");
 
 app.MapGet(
     "/vehicles",
@@ -191,7 +191,7 @@ app.MapGet(
 
         return Results.Ok(vehicles);
     }
-).WithTags("Vehicle");
+).RequireAuthorization().WithTags("Vehicle");
 
 app.MapGet(
     "/vehicle/{id}",
@@ -202,7 +202,7 @@ app.MapGet(
         if (vehicle == null) return Results.NotFound();
         return Results.Ok(vehicle);
     }
-).WithTags("Vehicle");
+).RequireAuthorization().WithTags("Vehicle");
 
 app.MapPut(
     "/vehicle/{id}",
@@ -223,7 +223,7 @@ app.MapPut(
 
         return Results.Ok(vehicle);
     }
-).WithTags("Vehicle");
+).RequireAuthorization().WithTags("Vehicle");
 
 app.MapDelete(
     "/vehicle/{id}",
@@ -236,7 +236,7 @@ app.MapDelete(
 
         return Results.NoContent();
     }
-).WithTags("Vehicle");
+).RequireAuthorization().WithTags("Vehicle");
 #endregion
 
 #region App
