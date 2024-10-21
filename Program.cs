@@ -10,6 +10,7 @@ using MinimalApi.Domain.Interfaces;
 using MinimalApi.Domain.ModelViews;
 using MinimalApi.Domain.Services;
 using MinimalApi.Infrastructure.Db;
+using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -71,7 +72,7 @@ string NewJwtToken(Administrator administrator)
 
     var claims = new List<Claim>()
     {
-        new Claim(ClaimTypes.Email, administrator.Email),
+        new Claim("Email", administrator.Email),
         new Claim("Profile", administrator.Profie),
     };
 
@@ -88,8 +89,18 @@ app.MapPost(
     "/administrators/login",
     ([FromBody] LoginDTO loginDTO, IAdministratorService administratorService) =>
     {
-        if (administratorService.Login(loginDTO) != null)
-            return Results.Ok("Login com sucesso");
+        var admin = administratorService.Login(loginDTO);
+        if (admin != null)
+        {
+            string token = NewJwtToken(admin);
+            return Results.Ok(new LoggedAdminModelView
+            {
+                Email = admin.Email,
+                Profile = admin.Profie,
+                Token = token,
+            });
+        }
+
         else
             return Results.Unauthorized();
     }
