@@ -20,7 +20,7 @@ namespace MinimalApi.Domain.Services
             return admin;
         }
 
-        Administrator IAdministratorService.Add(Administrator administrator)
+        public Administrator Add(Administrator administrator)
         {
             _context.Administrators.Add(administrator);
             _context.SaveChanges();
@@ -43,7 +43,7 @@ namespace MinimalApi.Domain.Services
             return query.ToList();
         }
 
-        Administrator? IAdministratorService.GetAdministratorById(int id)
+        public Administrator? GetAdministratorById(int id)
         {
             return _context.Administrators.Find(id);
         }
