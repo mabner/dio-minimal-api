@@ -57,7 +57,7 @@ var app = builder.Build();
 #endregion
 
 #region Home
-app.MapGet("/", () => Results.Json(new Home())).WithTags("Home");
+app.MapGet("/", () => Results.Json(new HomeModelView())).WithTags("Home");
 #endregion
 
 #region Administrators
@@ -99,7 +99,7 @@ app.MapPost(
     "/administrators",
     ([FromBody] AdministratorDTO administratorDTO, IAdministratorService administratorService) =>
     {
-        var validation = new ValidationErrors
+        var validation = new ValidationErrorsModelView
         {
             Messages = new List<string>()
         };
@@ -171,9 +171,9 @@ app.MapGet(
 #endregion
 
 #region Vehicle
-ValidationErrors validateDTO(VehicleDTO vehicleDTO)
+ValidationErrorsModelView validateDTO(VehicleDTO vehicleDTO)
 {
-    var validation = new ValidationErrors
+    var validation = new ValidationErrorsModelView
     {
         Messages = new List<string> { }
     };

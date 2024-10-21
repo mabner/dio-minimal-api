@@ -1,6 +1,6 @@
 namespace MinimalApi.Domain.ModelViews
 {
-    public struct Home
+    public struct HomeModelView
     {
         public string Message
         {
