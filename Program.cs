@@ -10,6 +10,8 @@ using MinimalApi.Domain.Interfaces;
 using MinimalApi.Domain.ModelViews;
 using MinimalApi.Domain.Services;
 using MinimalApi.Infrastructure.Db;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text;
 
 #region Builder
@@ -59,6 +61,29 @@ app.MapGet("/", () => Results.Json(new Home())).WithTags("Home");
 #endregion
 
 #region Administrators
+
+string NewJwtToken(Administrator administrator)
+{
+    if (string.IsNullOrEmpty(key)) return string.Empty;
+
+    var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
+    var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+    var claims = new List<Claim>()
+    {
+        new Claim(ClaimTypes.Email, administrator.Email),
+        new Claim("Profile", administrator.Profie),
+    };
+
+    var token = new JwtSecurityToken(
+        claims: claims,
+        expires: DateTime.Now.AddDays(1),
+        signingCredentials: credentials
+    );
+
+    return new JwtSecurityTokenHandler().WriteToken(token);
+}
+
 app.MapPost(
     "/administrators/login",
     ([FromBody] LoginDTO loginDTO, IAdministratorService administratorService) =>
