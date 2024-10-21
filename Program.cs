@@ -104,7 +104,7 @@ app.MapPost(
             Profile = administrator.Profie
         });
     }
-).WithTags("Administrators");
+).RequireAuthorization().WithTags("Administrators");
 
 app.MapGet(
     "/administrators",
@@ -123,7 +123,7 @@ app.MapGet(
         }
         return Results.Ok(admins);
     }
-).WithTags("Administrators");
+).RequireAuthorization().WithTags("Administrators");
 
 
 app.MapGet(
@@ -140,7 +140,7 @@ app.MapGet(
             Profile = administrator.Profie
         });
     }
-).WithTags("Administrators");
+).RequireAuthorization().WithTags("Administrators");
 
 
 #endregion
