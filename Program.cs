@@ -74,6 +74,7 @@ app.MapPost(
             Profie = administratorDTO.Profile.ToString() ?? Profile.User.ToString(),
         };
 
+        administratorService.Add(administrator);
 
         return Results.Created($"/administrators/{administrator.Id}", new AdministratorModelView
         {
