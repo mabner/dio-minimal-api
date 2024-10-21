@@ -25,8 +25,8 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddDbContext<DataBaseContext>(options =>
 {
     options.UseMySql(
-        builder.Configuration.GetConnectionString("mysql"),
-        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("mysql"))
+        builder.Configuration.GetConnectionString("MySql"),
+        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("MySql"))
     );
 });
 
