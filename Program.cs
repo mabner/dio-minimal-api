@@ -88,7 +88,7 @@ var app = builder.Build();
 #endregion
 
 #region Home
-app.MapGet("/", () => Results.Json(new HomeModelView())).WithTags("Home");
+app.MapGet("/", () => Results.Json(new HomeModelView())).AllowAnonymous().WithTags("Home");
 #endregion
 
 #region Administrators
@@ -134,7 +134,9 @@ app.MapPost(
         else
             return Results.Unauthorized();
     }
-).WithTags("Administrators");
+    )
+    .AllowAnonymous()
+    .WithTags("Administrators");
 
 app.MapPost(
     "/administrators",
