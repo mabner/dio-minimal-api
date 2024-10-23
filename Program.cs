@@ -1,3 +1,7 @@
+using System.ComponentModel.DataAnnotations;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,31 +14,30 @@ using MinimalApi.Domain.Interfaces;
 using MinimalApi.Domain.ModelViews;
 using MinimalApi.Domain.Services;
 using MinimalApi.Infrastructure.Db;
-using System.ComponentModel.DataAnnotations;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
 #region Builder
 var builder = WebApplication.CreateBuilder(args);
 
 var key = builder.Configuration.GetSection("Jwt").ToString();
-if (string.IsNullOrEmpty(key)) key = "123456";
+if (string.IsNullOrEmpty(key))
+    key = "123456";
 
-builder.Services.AddAuthentication(option =>
-{
-    option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(option =>
-{
-    option.TokenValidationParameters = new TokenValidationParameters
+builder
+    .Services.AddAuthentication(option =>
     {
-        ValidateLifetime = true,
+        option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(option =>
+    {
+        option.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateLifetime = true,
             ValidateAudience = false,
             ValidateIssuer = false,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
-    };
-});
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
+        };
+    });
 
 builder.Services.AddAuthorization();
 
@@ -45,7 +48,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "DIO - Minimal API", Version = "v1" });
-c.AddSecurityDefinition(
+    c.AddSecurityDefinition(
         "Bearer",
         new OpenApiSecurityScheme
         {
@@ -95,7 +98,8 @@ app.MapGet("/", () => Results.Json(new HomeModelView())).AllowAnonymous().WithTa
 
 string NewJwtToken(Administrator administrator)
 {
-    if (string.IsNullOrEmpty(key)) return string.Empty;
+    if (string.IsNullOrEmpty(key))
+        return string.Empty;
 
     var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
     var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
@@ -116,110 +120,120 @@ string NewJwtToken(Administrator administrator)
 }
 
 app.MapPost(
-    "/administrators/login",
-    ([FromBody] LoginDTO loginDTO, IAdministratorService administratorService) =>
-    {
-        var admin = administratorService.Login(loginDTO);
-        if (admin != null)
+        "/administrators/login",
+        ([FromBody] LoginDTO loginDTO, IAdministratorService administratorService) =>
         {
-            string token = NewJwtToken(admin);
-            return Results.Ok(new LoggedAdminModelView
+            var admin = administratorService.Login(loginDTO);
+            if (admin != null)
             {
-                Email = admin.Email,
-                Profile = admin.Profie,
-                Token = token,
-            });
+                string token = NewJwtToken(admin);
+                return Results.Ok(
+                    new LoggedAdminModelView
+                    {
+                        Email = admin.Email,
+                        Profile = admin.Profie,
+                        Token = token,
+                    }
+                );
+            }
+            else
+                return Results.Unauthorized();
         }
-
-        else
-            return Results.Unauthorized();
-    }
     )
     .AllowAnonymous()
     .WithTags("Administrators");
 
 app.MapPost(
-    "/administrators",
-    ([FromBody] AdministratorDTO administratorDTO, IAdministratorService administratorService) =>
-    {
-        var validation = new ValidationErrorsModelView
+        "/administrators",
+        (
+            [FromBody] AdministratorDTO administratorDTO,
+            IAdministratorService administratorService
+        ) =>
         {
-            Messages = new List<string>()
-        };
-        if (string.IsNullOrEmpty(administratorDTO.Email))
-            validation.Messages.Add("E-mail must be informed.");
-        if (string.IsNullOrEmpty(administratorDTO.Password))
-            validation.Messages.Add("Password must be informed.");
-        if (administratorDTO.Profile == null)
-            validation.Messages.Add("Profile must be informed.");
+            var validation = new ValidationErrorsModelView { Messages = new List<string>() };
+            if (string.IsNullOrEmpty(administratorDTO.Email))
+                validation.Messages.Add("E-mail must be informed.");
+            if (string.IsNullOrEmpty(administratorDTO.Password))
+                validation.Messages.Add("Password must be informed.");
+            if (administratorDTO.Profile == null)
+                validation.Messages.Add("Profile must be informed.");
 
-        if (validation.Messages.Count > 0)
-            return Results.BadRequest(validation);
+            if (validation.Messages.Count > 0)
+                return Results.BadRequest(validation);
 
-        var administrator = new Administrator
-        {
-            Email = administratorDTO.Email,
-            Password = administratorDTO.Password,
-            Profie = administratorDTO.Profile.ToString() ?? Profile.User.ToString(),
-        };
-
-        administratorService.Add(administrator);
-
-        return Results.Created($"/administrators/{administrator.Id}", new AdministratorModelView
-        {
-            Id = administrator.Id,
-            Email = administrator.Email,
-            Profile = administrator.Profie
-        });
-    }
-).RequireAuthorization().WithTags("Administrators");
-
-app.MapGet(
-    "/administrators",
-    ([FromQuery] int? page, IAdministratorService administratorService) =>
-    {
-        var admins = new List<AdministratorModelView>();
-        var administrators = administratorService.GetAdministrators(page);
-        foreach (var admin in administrators)
-        {
-            admins.Add(new AdministratorModelView
+            var administrator = new Administrator
             {
-                Id = admin.Id,
-                Email = admin.Email,
-                Profile = admin.Profie
-            });
-        }
-        return Results.Ok(admins);
-    }
-).RequireAuthorization().WithTags("Administrators");
+                Email = administratorDTO.Email,
+                Password = administratorDTO.Password,
+                Profie = administratorDTO.Profile.ToString() ?? Profile.User.ToString(),
+            };
 
+            administratorService.Add(administrator);
+
+            return Results.Created(
+                $"/administrators/{administrator.Id}",
+                new AdministratorModelView
+                {
+                    Id = administrator.Id,
+                    Email = administrator.Email,
+                    Profile = administrator.Profie
+                }
+            );
+        }
+    )
+    .RequireAuthorization()
+    .WithTags("Administrators");
 
 app.MapGet(
-    "/administrators/{id}",
-    ([FromRoute] int id, IAdministratorService administratorService) =>
-    {
-        var administrator = administratorService.GetAdministratorById(id);
-
-        if (administrator == null) return Results.NotFound();
-        return Results.Ok(new AdministratorModelView
+        "/administrators",
+        ([FromQuery] int? page, IAdministratorService administratorService) =>
         {
-            Id = administrator.Id,
-            Email = administrator.Email,
-            Profile = administrator.Profie
-        });
-    }
-).RequireAuthorization().WithTags("Administrators");
+            var admins = new List<AdministratorModelView>();
+            var administrators = administratorService.GetAdministrators(page);
+            foreach (var admin in administrators)
+            {
+                admins.Add(
+                    new AdministratorModelView
+                    {
+                        Id = admin.Id,
+                        Email = admin.Email,
+                        Profile = admin.Profie
+                    }
+                );
+            }
+            return Results.Ok(admins);
+        }
+    )
+    .RequireAuthorization()
+    .WithTags("Administrators");
 
+app.MapGet(
+        "/administrators/{id}",
+        ([FromRoute] int id, IAdministratorService administratorService) =>
+        {
+            var administrator = administratorService.GetAdministratorById(id);
+
+            if (administrator == null)
+                return Results.NotFound();
+            return Results.Ok(
+                new AdministratorModelView
+                {
+                    Id = administrator.Id,
+                    Email = administrator.Email,
+                    Profile = administrator.Profie
+                }
+            );
+        }
+    )
+    .RequireAuthorization()
+    .WithTags("Administrators");
 
 #endregion
 
 #region Vehicle
 ValidationErrorsModelView validateDTO(VehicleDTO vehicleDTO)
 {
-    var validation = new ValidationErrorsModelView
-    {
-        Messages = new List<string> { }
-    };
+    var validation = new ValidationErrorsModelView { Messages = new List<string> { } };
 
     if (string.IsNullOrEmpty(vehicleDTO.Model))
         validation.Messages.Add("Model must be informed.");
@@ -232,79 +246,92 @@ ValidationErrorsModelView validateDTO(VehicleDTO vehicleDTO)
 }
 
 app.MapPost(
-    "/vehicles",
-    ([FromBody] VehicleDTO vehicleDTO, IVehicleService vehicleService) =>
-    {
-        var validation = validateDTO(vehicleDTO);
-        if (validation.Messages.Count > 0)
-            return Results.BadRequest(validation);
-
-        var vehicle = new Vehicle
+        "/vehicles",
+        ([FromBody] VehicleDTO vehicleDTO, IVehicleService vehicleService) =>
         {
-            Model = vehicleDTO.Model,
-            Make = vehicleDTO.Make,
-            Year = vehicleDTO.Year,
-        };
-        vehicleService.Add(vehicle);
+            var validation = validateDTO(vehicleDTO);
+            if (validation.Messages.Count > 0)
+                return Results.BadRequest(validation);
 
-        return Results.Created($"/vehicle/{vehicle.Id}", vehicle);
-    }
-).RequireAuthorization().WithTags("Vehicle");
+            var vehicle = new Vehicle
+            {
+                Model = vehicleDTO.Model,
+                Make = vehicleDTO.Make,
+                Year = vehicleDTO.Year,
+            };
+            vehicleService.Add(vehicle);
 
-app.MapGet(
-    "/vehicles",
-    ([FromQuery] int? page, IVehicleService vehicleService) =>
-    {
-        var vehicles = vehicleService.GetVehicles(page);
-
-        return Results.Ok(vehicles);
-    }
-).RequireAuthorization().WithTags("Vehicle");
+            return Results.Created($"/vehicle/{vehicle.Id}", vehicle);
+        }
+    )
+    .RequireAuthorization()
+    .WithTags("Vehicle");
 
 app.MapGet(
-    "/vehicle/{id}",
-    ([FromRoute] int id, IVehicleService vehicleService) =>
-    {
-        var vehicle = vehicleService.GetVehicleById(id);
+        "/vehicles",
+        ([FromQuery] int? page, IVehicleService vehicleService) =>
+        {
+            var vehicles = vehicleService.GetVehicles(page);
 
-        if (vehicle == null) return Results.NotFound();
-        return Results.Ok(vehicle);
-    }
-).RequireAuthorization().WithTags("Vehicle");
+            return Results.Ok(vehicles);
+        }
+    )
+    .RequireAuthorization()
+    .WithTags("Vehicle");
+
+app.MapGet(
+        "/vehicle/{id}",
+        ([FromRoute] int id, IVehicleService vehicleService) =>
+        {
+            var vehicle = vehicleService.GetVehicleById(id);
+
+            if (vehicle == null)
+                return Results.NotFound();
+            return Results.Ok(vehicle);
+        }
+    )
+    .RequireAuthorization()
+    .WithTags("Vehicle");
 
 app.MapPut(
-    "/vehicle/{id}",
-    ([FromRoute] int id, VehicleDTO vehicleDTO, IVehicleService vehicleService) =>
-    {
-        var vehicle = vehicleService.GetVehicleById(id);
-        if (vehicle == null) return Results.NotFound();
+        "/vehicle/{id}",
+        ([FromRoute] int id, VehicleDTO vehicleDTO, IVehicleService vehicleService) =>
+        {
+            var vehicle = vehicleService.GetVehicleById(id);
+            if (vehicle == null)
+                return Results.NotFound();
 
-        var validation = validateDTO(vehicleDTO);
-        if (validation.Messages.Count > 0)
-            return Results.BadRequest(validation);
+            var validation = validateDTO(vehicleDTO);
+            if (validation.Messages.Count > 0)
+                return Results.BadRequest(validation);
 
-        vehicle.Model = vehicleDTO.Model;
-        vehicle.Make = vehicleDTO.Make;
-        vehicle.Year = vehicleDTO.Year;
+            vehicle.Model = vehicleDTO.Model;
+            vehicle.Make = vehicleDTO.Make;
+            vehicle.Year = vehicleDTO.Year;
 
-        vehicleService.Update(vehicle);
+            vehicleService.Update(vehicle);
 
-        return Results.Ok(vehicle);
-    }
-).RequireAuthorization().WithTags("Vehicle");
+            return Results.Ok(vehicle);
+        }
+    )
+    .RequireAuthorization()
+    .WithTags("Vehicle");
 
 app.MapDelete(
-    "/vehicle/{id}",
-    ([FromRoute] int id, IVehicleService vehicleService) =>
-    {
-        var vehicle = vehicleService.GetVehicleById(id);
+        "/vehicle/{id}",
+        ([FromRoute] int id, IVehicleService vehicleService) =>
+        {
+            var vehicle = vehicleService.GetVehicleById(id);
 
-        if (vehicle == null) return Results.NotFound();
-        vehicleService.Remove(vehicle);
+            if (vehicle == null)
+                return Results.NotFound();
+            vehicleService.Remove(vehicle);
 
-        return Results.NoContent();
-    }
-).RequireAuthorization().WithTags("Vehicle");
+            return Results.NoContent();
+        }
+    )
+    .RequireAuthorization()
+    .WithTags("Vehicle");
 #endregion
 
 #region App
