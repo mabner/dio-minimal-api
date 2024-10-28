@@ -27,7 +27,7 @@ namespace MinimalApi.Infrastructure.Db
                         Id = 1,
                         Email = "admin@test.com",
                         Password = "123456",
-                        Profie = "Adm",
+                        Profie = "Admin",
                     }
                 );
         }
