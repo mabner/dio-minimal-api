@@ -3,6 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -108,6 +109,7 @@ string NewJwtToken(Administrator administrator)
     {
         new Claim("Email", administrator.Email),
         new Claim("Profile", administrator.Profie),
+        new Claim(ClaimTypes.Role, administrator.Profie),
     };
 
     var token = new JwtSecurityToken(
@@ -182,6 +184,7 @@ app.MapPost(
         }
     )
     .RequireAuthorization()
+    .RequireAuthorization(new AuthorizeAttribute { Roles = "Admin" })
     .WithTags("Administrators");
 
 app.MapGet(
@@ -205,6 +208,7 @@ app.MapGet(
         }
     )
     .RequireAuthorization()
+    .RequireAuthorization(new AuthorizeAttribute { Roles = "Admin" })
     .WithTags("Administrators");
 
 app.MapGet(
@@ -226,6 +230,7 @@ app.MapGet(
         }
     )
     .RequireAuthorization()
+    .RequireAuthorization(new AuthorizeAttribute { Roles = "Admin" })
     .WithTags("Administrators");
 
 #endregion
@@ -265,6 +270,7 @@ app.MapPost(
         }
     )
     .RequireAuthorization()
+    .RequireAuthorization(new AuthorizeAttribute { Roles = "Admin,Superuser" })
     .WithTags("Vehicle");
 
 app.MapGet(
@@ -291,6 +297,7 @@ app.MapGet(
         }
     )
     .RequireAuthorization()
+    .RequireAuthorization(new AuthorizeAttribute { Roles = "Admin,Superuser" })
     .WithTags("Vehicle");
 
 app.MapPut(
@@ -315,6 +322,7 @@ app.MapPut(
         }
     )
     .RequireAuthorization()
+    .RequireAuthorization(new AuthorizeAttribute { Roles = "Admin" })
     .WithTags("Vehicle");
 
 app.MapDelete(
@@ -331,6 +339,7 @@ app.MapDelete(
         }
     )
     .RequireAuthorization()
+    .RequireAuthorization(new AuthorizeAttribute { Roles = "Admin" })
     .WithTags("Vehicle");
 #endregion
 
