@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MinimalApi.Infrastructure.Db;
 
@@ -10,9 +11,11 @@ using MinimalApi.Infrastructure.Db;
 namespace MinimalApi.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    partial class DataBaseContextModelSnapshot : ModelSnapshot
+    [Migration("20241028035822_AdministratorAditionalUsers")]
+    partial class AdministratorAditionalUsers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -104,13 +107,6 @@ namespace MinimalApi.Migrations
                             Make = "Volkswagen",
                             Model = "Polo CL",
                             Year = 1999
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Make = "Renault",
-                            Model = "Clio RN",
-                            Year = 1996
                         });
                 });
 #pragma warning restore 612, 618

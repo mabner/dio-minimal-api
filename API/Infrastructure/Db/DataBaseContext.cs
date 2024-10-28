@@ -28,6 +28,39 @@ namespace MinimalApi.Infrastructure.Db
                         Email = "admin@test.com",
                         Password = "123456",
                         Profie = "Admin",
+                    },
+                    new Administrator
+                    {
+                        Id = 2,
+                        Email = "john@doe.com",
+                        Password = "123",
+                        Profie = "User",
+                    },
+                    new Administrator
+                    {
+                        Id = 3,
+                        Email = "super@doe.com",
+                        Password = "123",
+                        Profie = "Superuser",
+                    }
+                );
+
+            modelBuilder
+                .Entity<Vehicle>()
+                .HasData(
+                    new Vehicle
+                    {
+                        Id = 1,
+                        Model = "Polo CL",
+                        Make = "Volkswagen",
+                        Year = 1999,
+                    },
+                    new Vehicle
+                    {
+                        Id = 2,
+                        Model = "Clio RN",
+                        Make = "Renault",
+                        Year = 1996,
                     }
                 );
         }
