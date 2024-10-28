@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.002.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dio-minimal-api", "dio-minimal-api.csproj", "{27FD605E-24C1-4A04-BFD6-16788DFC3BBA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dio-minimal-api", "API\dio-minimal-api.csproj", "{F31C36BC-934E-421A-ABA0-3D1CC8CB20EC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{27FD605E-24C1-4A04-BFD6-16788DFC3BBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{27FD605E-24C1-4A04-BFD6-16788DFC3BBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{27FD605E-24C1-4A04-BFD6-16788DFC3BBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{27FD605E-24C1-4A04-BFD6-16788DFC3BBA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F31C36BC-934E-421A-ABA0-3D1CC8CB20EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F31C36BC-934E-421A-ABA0-3D1CC8CB20EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F31C36BC-934E-421A-ABA0-3D1CC8CB20EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F31C36BC-934E-421A-ABA0-3D1CC8CB20EC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {A791AB01-04BB-4AC8-BF79-03DC73D7D341}
+		SolutionGuid = {D8D641AF-82FD-4690-85F8-6B5C78947145}
 	EndGlobalSection
 EndGlobal
