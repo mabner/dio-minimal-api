@@ -22,7 +22,5 @@ public class AdministratorTest
         Assert.AreEqual("admin@test.com", admin.Email);
         Assert.AreEqual("123456", admin.Password);
         Assert.AreEqual("Admin", admin.Profie);
-
-        
     }
 }
