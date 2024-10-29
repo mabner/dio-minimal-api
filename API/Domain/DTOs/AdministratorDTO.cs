@@ -1,5 +1,4 @@
 ﻿using MinimalApi.Domain.Enums;
-using System.ComponentModel.DataAnnotations;
 
 namespace MinimalApi.Domain.DTOs
 {

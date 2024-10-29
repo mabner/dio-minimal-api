@@ -1,7 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,6 +11,9 @@ using MinimalApi.Domain.Interfaces;
 using MinimalApi.Domain.ModelViews;
 using MinimalApi.Domain.Services;
 using MinimalApi.Infrastructure.Db;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 #region Builder
 var builder = WebApplication.CreateBuilder(args);

@@ -1,6 +1,4 @@
-﻿using MinimalApi.Domain.Enums;
-
-namespace MinimalApi.Domain.ModelViews
+﻿namespace MinimalApi.Domain.ModelViews
 {
     public record AdministratorModelView
     {

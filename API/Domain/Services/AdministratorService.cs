@@ -32,7 +32,7 @@ namespace MinimalApi.Domain.Services
         public List<Administrator> GetAdministrators(int? page)
         {
             var query = _context.Administrators.AsQueryable();
-            
+
             int itensPerPage = 10;
 
             if (page != null)
