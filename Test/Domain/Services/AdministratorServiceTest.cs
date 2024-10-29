@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using MinimalApi.Domain.Entities;
 using MinimalApi.Domain.Services;
 using MinimalApi.Infrastructure.Db;
+using System.Reflection;
 
 namespace Test.Domain.Entities;
 
@@ -11,8 +12,11 @@ public class AdministratorServiceTest
 {
     private DataBaseContext CreateTestContext()
     {
+        var assemblyPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        var path = Path.GetFullPath(Path.Combine(assemblyPath ?? "", "..", "..", ".."));
+
         var builder = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
+            .SetBasePath(path ?? Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
             .AddEnvironmentVariables();
 
@@ -22,7 +26,7 @@ public class AdministratorServiceTest
     }
 
     [TestMethod]
-    public void TestGetSetProperties()
+    public void SaveAdminTest()
     {
         // Arrange
         var context = CreateTestContext();
@@ -33,15 +37,34 @@ public class AdministratorServiceTest
         admin.Password = "123456";
         admin.Profie = "Admin";
 
-        
         var adminServices = new AdministratorService(context);
 
         // Act (Set)
         adminServices.Add(admin);
 
-
         // Assert (Get)
         Assert.AreEqual(1, adminServices.GetAdministrators(1).Count());
-        
+    }
+
+    [TestMethod]
+    public void GetAdminByIdTest()
+    {
+        // Arrange
+        var context = CreateTestContext();
+        context.Database.ExecuteSqlRaw("truncate table administrators");
+
+        var admin = new Administrator();
+        admin.Email = "test@test.com";
+        admin.Password = "123456";
+        admin.Profie = "Admin";
+
+        var adminServices = new AdministratorService(context);
+
+        // Act (Set)
+        adminServices.Add(admin);
+        var adminFromDb = adminServices.GetAdministratorById(admin.Id);
+
+        // Assert (Get)
+        Assert.AreEqual(1, adminFromDb.Id);
     }
 }
