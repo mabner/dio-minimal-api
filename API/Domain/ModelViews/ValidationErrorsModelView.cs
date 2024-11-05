@@ -2,6 +2,6 @@
 {
     public class ValidationErrorsModelView
     {
-        public List<string> Messages { get; set; }
+        public List<string> Messages { get; set; } = default!;
     }
 }
