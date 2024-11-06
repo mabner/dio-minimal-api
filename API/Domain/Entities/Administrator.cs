@@ -1,24 +1,23 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MinimalApi.Domain.Entities
+namespace MinimalApi.Domain.Entities;
+
+public class Administrator
 {
-    public class Administrator
-    {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; } = default!;
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public int Id { get; set; } = default!;
 
-        [Required]
-        [StringLength(255)]
-        public string Email { get; set; } = default!;
+    [Required]
+    [StringLength(255)]
+    public string Email { get; set; } = default!;
 
-        [Required]
-        [StringLength(50)]
-        public string Password { get; set; } = default!;
+    [Required]
+    [StringLength(50)]
+    public string Password { get; set; } = default!;
 
-        [Required]
-        [StringLength(10)]
-        public string Profile { get; set; } = default!;
-    }
+    [Required]
+    [StringLength(10)]
+    public string Profile { get; set; } = default!;
 }
