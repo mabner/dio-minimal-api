@@ -5,6 +5,8 @@ namespace MinimalApi.Domain.Entities;
 
 public class Vehicle
 {
+    private string result;
+
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; } = default!;
