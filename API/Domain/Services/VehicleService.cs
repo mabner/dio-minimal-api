@@ -14,22 +14,28 @@ namespace MinimalApi.Domain.Services
             _context = context;
         }
 
-        public void Add(Vehicle vehicle)
+        public Vehicle Add(Vehicle vehicle)
         {
             _context.Vehicles.Add(vehicle);
             _context.SaveChanges();
+
+            return vehicle;
         }
 
-        public void Update(Vehicle vehicle)
+        public Vehicle Update(Vehicle vehicle)
         {
             _context.Vehicles.Update(vehicle);
             _context.SaveChanges();
+
+            return vehicle;
         }
 
-        public void Remove(Vehicle vehicle)
+        public Vehicle Remove(Vehicle vehicle)
         {
             _context.Vehicles.Remove(vehicle);
             _context.SaveChanges();
+
+            return vehicle;
         }
 
         public Vehicle? GetVehicleById(int id)

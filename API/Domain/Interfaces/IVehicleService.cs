@@ -7,10 +7,10 @@ namespace MinimalApi.Domain.Interfaces
         List<Vehicle> GetVehicles(int? page = 1, string? model = null, string? make = null);
         Vehicle? GetVehicleById(int id);
 
-        void Add(Vehicle vehicle);
+        Vehicle? Add(Vehicle vehicle);
 
-        void Update(Vehicle vehicle);
+        Vehicle? Update(Vehicle vehicle);
 
-        void Remove(Vehicle vehicle);
+        Vehicle? Remove(Vehicle vehicle);
     }
 }
