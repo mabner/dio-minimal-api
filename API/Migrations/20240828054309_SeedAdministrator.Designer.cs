@@ -57,7 +57,7 @@ namespace MinimalApi.Migrations
                             Id = 1,
                             Email = "admin@test.com",
                             Password = "123456",
-                            Profie = "Adm"
+                            Profile = "Adm"
                         });
                 });
 #pragma warning restore 612, 618

@@ -59,7 +59,7 @@ CREATE TABLE `administrators` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
   `Email` varchar(255) NOT NULL,
   `Password` varchar(50) NOT NULL,
-  `Profie` varchar(10) NOT NULL,
+  `Profile` varchar(10) NOT NULL,
   PRIMARY KEY (`Id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
