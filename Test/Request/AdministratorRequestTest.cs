@@ -52,5 +52,7 @@ public class AdministratorRequestTest
         Assert.IsNotNull(loggedAdmin?.Email ?? "default@mail.com");
         Assert.IsNotNull(loggedAdmin?.Profile ?? "User");
         Assert.IsNotNull(loggedAdmin?.Token ?? "x1x2x3");
+
+        Console.WriteLine(loggedAdmin.Token);
     }
 }
