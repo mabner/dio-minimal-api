@@ -15,12 +15,12 @@ public class AdministratorTest
         admin.Id = 1;
         admin.Email = "admin@test.com";
         admin.Password = "123456";
-        admin.Profie = "Admin";
+        admin.Profile = "Admin";
 
         // Assert (Get)
         Assert.AreEqual(1, admin.Id);
         Assert.AreEqual("admin@test.com", admin.Email);
         Assert.AreEqual("123456", admin.Password);
-        Assert.AreEqual("Admin", admin.Profie);
+        Assert.AreEqual("Admin", admin.Profile);
     }
 }

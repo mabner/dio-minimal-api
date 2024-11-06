@@ -27,21 +27,21 @@ namespace MinimalApi.Infrastructure.Db
                         Id = 1,
                         Email = "admin@test.com",
                         Password = "123456",
-                        Profie = "Admin",
+                        Profile = "Admin",
                     },
                     new Administrator
                     {
                         Id = 2,
                         Email = "john@doe.com",
                         Password = "123",
-                        Profie = "User",
+                        Profile = "User",
                     },
                     new Administrator
                     {
                         Id = 3,
                         Email = "super@doe.com",
                         Password = "123",
-                        Profie = "Superuser",
+                        Profile = "Superuser",
                     }
                 );
 

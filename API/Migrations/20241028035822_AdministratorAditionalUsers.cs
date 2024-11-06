@@ -13,7 +13,7 @@ namespace MinimalApi.Migrations
         {
             migrationBuilder.InsertData(
                 table: "Administrators",
-                columns: new[] { "Id", "Email", "Password", "Profie" },
+                columns: new[] { "Id", "Email", "Password", "Profile" },
                 values: new object[,]
                 {
                     { 2, "john@doe.com", "123", "User" },

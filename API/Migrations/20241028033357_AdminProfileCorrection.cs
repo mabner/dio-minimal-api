@@ -14,7 +14,7 @@ namespace MinimalApi.Migrations
                 table: "Administrators",
                 keyColumn: "Id",
                 keyValue: 1,
-                column: "Profie",
+                column: "Profile",
                 value: "Admin");
         }
 
@@ -25,7 +25,7 @@ namespace MinimalApi.Migrations
                 table: "Administrators",
                 keyColumn: "Id",
                 keyValue: 1,
-                column: "Profie",
+                column: "Profile",
                 value: "Adm");
         }
     }

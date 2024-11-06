@@ -6,7 +6,24 @@ namespace Test.Mocks;
 
 internal class AdministratorServiceMock : IAdministratorService
 {
-    private static List<Administrator> admins = new List<Administrator>();
+    private static List<Administrator> admins = new List<Administrator>()
+    {
+        new Administrator
+        {
+            Id = 1,
+            Email = "admin@test.com",
+            Password = "123456",
+            Profile = "Admin"
+        },
+        new Administrator
+        {
+            Id = 2,
+            Email = "super@user.com",
+            Password = "1234",
+            Profile = "Superuser",
+        }
+    };
+
     public Administrator Add(Administrator administrator)
     {
         administrator.Id = admins.Count() + 1;

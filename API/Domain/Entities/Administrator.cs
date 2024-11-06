@@ -19,6 +19,6 @@ namespace MinimalApi.Domain.Entities
 
         [Required]
         [StringLength(10)]
-        public string Profie { get; set; } = default!;
+        public string Profile { get; set; } = default!;
     }
 }

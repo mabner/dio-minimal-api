@@ -35,7 +35,7 @@ public class AdministratorServiceTest
         var admin = new Administrator();
         admin.Email = "test@test.com";
         admin.Password = "123456";
-        admin.Profie = "Admin";
+        admin.Profile = "Admin";
 
         var adminServices = new AdministratorService(context);
 
@@ -56,7 +56,7 @@ public class AdministratorServiceTest
         var admin = new Administrator();
         admin.Email = "test@test.com";
         admin.Password = "123456";
-        admin.Profie = "Admin";
+        admin.Profile = "Admin";
 
         var adminServices = new AdministratorService(context);
 
@@ -65,6 +65,6 @@ public class AdministratorServiceTest
         var adminFromDb = adminServices.GetAdministratorById(admin.Id);
 
         // Assert (Get)
-        Assert.AreEqual(1, adminFromDb.Id);
+        Assert.AreEqual(1, adminFromDb?.Id);
     }
 }

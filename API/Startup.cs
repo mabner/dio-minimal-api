@@ -137,8 +137,8 @@ public class Startup
                 var claims = new List<Claim>()
                 {
                     new Claim("Email", administrator.Email),
-                    new Claim("Profile", administrator.Profie),
-                    new Claim(ClaimTypes.Role, administrator.Profie),
+                    new Claim("Profile", administrator.Profile),
+                    new Claim(ClaimTypes.Role, administrator.Profile),
                 };
 
                 var token = new JwtSecurityToken(
@@ -163,7 +163,7 @@ public class Startup
                                 new LoggedAdminModelView
                                 {
                                     Email = admin.Email,
-                                    Profile = admin.Profie,
+                                    Profile = admin.Profile,
                                     Token = token,
                                 }
                             );
@@ -201,7 +201,7 @@ public class Startup
                         {
                             Email = administratorDTO.Email,
                             Password = administratorDTO.Password,
-                            Profie = administratorDTO.Profile.ToString() ?? Profile.User.ToString(),
+                            Profile = administratorDTO.Profile.ToString() ?? Profile.User.ToString(),
                         };
 
                         administratorService.Add(administrator);
@@ -212,7 +212,7 @@ public class Startup
                             {
                                 Id = administrator.Id,
                                 Email = administrator.Email,
-                                Profile = administrator.Profie
+                                Profile = administrator.Profile
                             }
                         );
                     }
@@ -235,7 +235,7 @@ public class Startup
                                 {
                                     Id = admin.Id,
                                     Email = admin.Email,
-                                    Profile = admin.Profie
+                                    Profile = admin.Profile
                                 }
                             );
                         }
@@ -260,7 +260,7 @@ public class Startup
                             {
                                 Id = administrator.Id,
                                 Email = administrator.Email,
-                                Profile = administrator.Profie
+                                Profile = administrator.Profile
                             }
                         );
                     }
