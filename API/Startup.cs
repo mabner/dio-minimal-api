@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MinimalApi.Domain.DTOs;
@@ -96,6 +95,14 @@ public class Startup
                 ServerVersion.AutoDetect(Configuration.GetConnectionString("MySql"))
             );
         });
+
+        services.AddCors(options =>
+        {
+            options.AddDefaultPolicy(builder =>
+            {
+                builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+            });
+        });
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -110,6 +117,8 @@ public class Startup
 
         app.UseAuthentication();
         app.UseAuthorization();
+
+        app.UseCors();
 
         #region Endpoints
         app.UseEndpoints(endpoints =>
@@ -201,7 +210,8 @@ public class Startup
                         {
                             Email = administratorDTO.Email,
                             Password = administratorDTO.Password,
-                            Profile = administratorDTO.Profile.ToString() ?? Profile.User.ToString(),
+                            Profile =
+                                administratorDTO.Profile.ToString() ?? Profile.User.ToString(),
                         };
 
                         administratorService.Add(administrator);
